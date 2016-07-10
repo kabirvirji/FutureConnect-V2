@@ -1,76 +1,63 @@
-<?php  //create database connection
+<?php
+// create database connection
+require_once("database_connection.php");
+// require the helper functions one
+require_once("functions.php");
 
-//defining as constants because they do not varry
-define("DB_HOST", "");
-define("DB_USER", "");
-define("DB_PASSWORD", "");
-define("DB_NAME", "FutureConnect");
+$username_error = "";
+$password_error = "";
+$school_error = "";
+$program_error = "";
 
-$connection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+if (isset($_POST['submit'])) {
+	empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
+	empty($_POST['password']) ? $password_error = "required field" : $password = mysql_real_escape_string($_POST['password']);
+	empty($_POST['school']) ? $school_error = "required field" : $school = test_input($_POST['school']);
+	empty($_POST['program']) ? $program_error = "required field" : $password = test_input($_POST['program']);
 
+	if (!empty($username) && !empty($password) && !empty($school) && !empty($program)) {
+		$sql_write = "INSERT INTO mentors (username, password, school, program)
+			VALUES ('{$username}', '{$password}', '{$school}', '{$program}')";
 
-if(mysql_errno()) {  // if database connection fails
-	die("Database connection failed"); }  //ugly error for now
+		$result = mysql_db_query("FutureConnect", $sql_write);
+
+		if ($result) {
+			redirect_to("main_page.php");
+		}
+	}
+}
 
 ?>
 
-<!DOCTYPE html>
-
-<html lang='en'>
-	<head>
-		<title>Mentor Register</title>
-	</head>
-	<body>
+<!-- HTML header -->
+<?php include("../first-cms/header.php"); ?>
+	
+	<title>Mentor Register</title>
 	<p>Welcome to the Mentor Register page! Please enter a username, password, your school, and your program.</p>
 
 	<!-- sending the filename as $_POST request -->
 	<form action="mentor_register.php" method="post">
 		<!-- name is key in $_POST array -->
 	 	username<br>
-	 	<input type="text" name="username"><br>
+	 	<input type="text" name="username">
+	 	<span class="error">* <?php echo $username_error;?></span><br>
 	 	password<br>
-	  	<input type="password" name="password"><br>
+	  	<input type="password" name="password">
+	  	<span class="error">* <?php echo $password_error;?></span><br>
 	  	school<br>
-	  	<input type="text" name="school"><br>
+	  	<input type="text" name="school">
+	  	<span class="error">* <?php echo $school_error;?></span><br>
 	  	program<br>
-	  	<input type="text" name="school"><br><br>
+	  	<input type="text" name="program">
+	  	<span class="error">* <?php echo $program_error;?></span><br><br>
 	  	<!-- submit button -->
 	  	<input type="submit" name="submit" value="submit">
 	</form>
 
-	<?php
-
-
-		if (isset($_POST['submit'])) {
-			$username = $_POST['username'];
-			$password = $_POST['password'];
-			$school = $_POST['school'];
-			$program = $_POST['program'];
-			$username = mysql_real_escape_string($username);
-			$password = mysql_real_escape_string($password);
-			$school = mysql_real_escape_string($school);
-			$program = mysql_real_escape_string($program);
-		
-
-		// query and write
-		$sql_write = "INSERT INTO mentors (username, password, school, program)
-				VALUES ('{$username}', '{$password}', '{$school}', '{$program}')";
-
-		$result = mysql_db_query("FutureConnect", $sql_write);
-
-
-
-		if (!$result) {
-			echo "Database Query Failed";
-		}
-
-}
-	?>
-
-	</body>
-</html>
+<!-- HTML footer -->
+<?php include("../first-cms/footer.php"); ?>
 
 <?php
 mysql_close($connection);
-echo "<br>After you've clicked submit, go back to the main page and login.";
+echo "<br>After you've clicked submit, you can login from the main page";
 ?>
