@@ -7,10 +7,9 @@ require_once("functions.php");
 $username_error = "";
 $password_error = "";
 
-
 if (isset($_POST['submit'])) {
 	empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
-	empty($_POST['password']) ? $password_error = "required field" : $password = test_input($_POST['password']);
+	empty($_POST['password']) ? $password_error = "required field" : $password = mysql_real_escape_string($_POST['password']);
 
 
 	if (!empty($username) && !empty($password)) {
@@ -19,10 +18,8 @@ if (isset($_POST['submit'])) {
 
 		$result = mysql_db_query("FutureConnect", $sql_write);
 
-
-
-		if (!$result) {
-			echo "Database Query Failed";
+		if ($result) {
+			redirect_to("main_page.php");
 		}
 	}
 }
@@ -57,5 +54,5 @@ if (isset($_POST['submit'])) {
 
 <?php
 mysql_close($connection);
-echo "<br>After you've clicked submit, go back to the main page and login.";
+echo "<br>After you've clicked submit, you can login from the main page.";
 ?>
