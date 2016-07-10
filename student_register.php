@@ -1,26 +1,14 @@
-<?php  //create database connection
-
-//defining as constants because they do not varry
-define("DB_HOST", "");
-define("DB_USER", "");
-define("DB_PASSWORD", "");
-define("DB_NAME", "FutureConnect");
-
-$connection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-
-if(mysql_errno()) {  // if database connection fails
-	die("Database connection failed"); }  //ugly error for now
-
+<?php
+// create database connection
+require_once("database_connection.php");
+// require the helper functions one
+require_once("functions.php");
 ?>
 
-<!DOCTYPE html>
+<!-- HTML header -->
+<?php include("../first-cms/header.php"); ?>
 
-<html lang='en'>
-	<head>
-		<title>Student Register</title>
-	</head>
-	<body>
+	<title>Student Register</title>
 	<p>Welcome to the Student Register page! You can register with a username and password below.</p>
 
 	<!-- sending the filename as $_POST request -->
@@ -58,8 +46,8 @@ if(mysql_errno()) {  // if database connection fails
 }
 	?>
 
-	</body>
-</html>
+<!-- HTML footer -->
+<?php include("../first-cms/footer.php"); ?>
 
 <?php
 mysql_close($connection);
