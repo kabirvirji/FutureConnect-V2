@@ -1,64 +1,54 @@
-<?php
-// // create database connection
-// require_once("database_connection.php");
-// // require the helper functions one
-// require_once("functions.php");
-
-
-// if (isset($_POST['submit'])) {
-      
-//       $username = mysqli_real_escape_string($_POST['username']);
-//       $password = mysqli_real_escape_string($_POST['password']); 
-      
-//       $sql_write = "SELECT id FROM admin WHERE username = '$username' and passcode = '$password'";
-//       $result = mysql_db_query("FutureConnect", $sql_write);
-      
-//       $row = mysqli_fetch_array($result, MYSQL_ASSOC);
-//       $active = $row['active'];}
-?>
-<?php require_once("../includes/session.php"); ?>
-<?php require_once("../includes/db_connection.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
-<?php require_once("../includes/validation_functions.php"); ?>
-<?php confirm_logged_in(); ?>
+<?php require_once("session.php"); ?>
+<?php require_once("database_connection.php"); ?>
+<?php require_once("functions.php"); ?>
+<?php //require_once("validation_functions.php"); ?>
+<?php //confirm_logged_in(); ?>
 
 <?php
+
+$username = "";
+$password = "";
+
 if (isset($_POST['submit'])) {
   // Process the form
   
   if (!empty($username) && !empty($password)) {
-    // Attempt Login
-
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $found_student = student_login($username, $password);
+	// Attempt Login
+	echo "You've made it this far!";
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	$found_student = attempt_login($username, $password);
 
     if ($found_student) {
-      // Success
-      // Mark user as logged in
-      redirect_to("search_page.php");
+
+	    // Mark user as logged in
+	    //$_SESSION["student_id"] = $found_student["id"];
+	    //$_SESSION["username"] = $found_admin["username"];
+	    
+	    //redirect_to("main_page.php"); // Will be search page later FIX REDIRECT FUNCTION
+
+    	echo "You did it! You're logged in!";
+
     } else {
-      // Failure
-      $_SESSION["message"] = "Login failed. Try again.";
+    	// Failure
+    	$_SESSION["message"] = "Login failed. Try again.";
     }
   }
 } else {
-  // This is probably a GET request
-  
+
+	echo "not a post request";
 } // end: if (isset($_POST['submit']))
 
 ?>
 
 <?php $layout_context = "admin"; ?>
 <?php include("../first-cms/header.php"); ?>
+<title>Student Login</title>
 <div id="main">
   <div id="navigation">
     &nbsp;
   </div>
   <div id="page">
-    <?php echo message(); ?>
-    <?php echo form_errors($errors); ?>
-    
     <h2>Login</h2>
     <form action="student_login.php" method="post">
       <p>Username:
@@ -70,8 +60,9 @@ if (isset($_POST['submit'])) {
       <input type="submit" name="submit" value="Submit" />
     </form>
     <br />
-    <a href="manage_admins.php">Cancel</a>
+    <a href="/first-cms/main_page.php">Cancel</a>
   </div>
 </div>
 
-<?php include("../first-cms/footer.php"); ?>
+<?php include("../first-cms/footer.php"); 
+?>
