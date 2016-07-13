@@ -9,12 +9,14 @@ $password_error = "";
 
 if (isset($_POST['submit'])) {
 	empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
-	empty($_POST['password']) ? $password_error = "required field" : $password = mysql_real_escape_string($_POST['password']);
+	empty($_POST['password']) ? $password_error = "required field" : $password = $_POST['password'];
+
+	$hashed_password = password_encrypt($password);
 
 
 	if (!empty($username) && !empty($password)) {
 		$sql_write = "INSERT INTO students (username, password)
-			VALUES ('{$username}', '{$password}')";
+			VALUES ('{$username}', '{$hashed_password}')";
 
 		$result = mysql_db_query("FutureConnect", $sql_write);
 
