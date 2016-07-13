@@ -6,15 +6,12 @@
 
 <?php
 
-$username = "";
-$password = "";
-
 if (isset($_POST['submit'])) {
   // Process the form
-  
-  if (!empty($username) && !empty($password)) {
+  echo "You made it here<br>";
+  //if (!empty($username) && !empty($password)) {
 	// Attempt Login
-	echo "You've made it this far!";
+	echo "You've made it this far!<br>";
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$found_student = attempt_login($username, $password);
@@ -31,10 +28,12 @@ if (isset($_POST['submit'])) {
 
     } else {
     	// Failure
-    	$_SESSION["message"] = "Login failed. Try again.";
+    	//$_SESSION["message"] = "Login failed. Try again.";
+      echo "Login failed. Try again.<br>";
     }
   }
-} else {
+//}
+   else {
 
 	echo "not a post request";
 } // end: if (isset($_POST['submit']))
