@@ -8,13 +8,17 @@
 
 if (isset($_POST['submit'])) {
   // Process the form
-  echo "You made it here<br>";
+  echo "It is a post request<br>";
   //if (!empty($username) && !empty($password)) {
 	// Attempt Login
-	echo "You've made it this far!<br>";
+	
 	$username = $_POST['username'];
-	$password = $_POST['password'];
-	$found_student = attempt_login($username, $password);
+	$hashed_password = password_encrypt($_POST['password']);
+	$found_student = attempt_login($username, $hashed_password);
+  echo "You got past the attempt_login fucntion<br>";
+
+  echo !$found_student;
+  // found student is false
 
     if ($found_student) {
 
@@ -40,7 +44,7 @@ if (isset($_POST['submit'])) {
 
 ?>
 
-<?php $layout_context = "admin"; ?>
+<?php //$layout_context = "admin"; ?>
 <?php include("../first-cms/header.php"); ?>
 <title>Student Login</title>
 <div id="main">
