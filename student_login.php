@@ -1,24 +1,17 @@
 <?php require_once("session.php"); ?>
 <?php require_once("database_connection.php"); ?>
 <?php require_once("functions.php"); ?>
-<?php //require_once("validation_functions.php"); ?>
-<?php //confirm_logged_in(); ?>
 
 <?php
 
 if (isset($_POST['submit'])) {
   // Process the form
-  echo "It is a post request<br>";
-  //if (!empty($username) && !empty($password)) {
+
 	// Attempt Login
 	
 	$username = $_POST['username'];
 	$hashed_password = password_encrypt($_POST['password']);
 	$found_student = attempt_login($username, $hashed_password);
-  echo "You got past the attempt_login fucntion<br>";
-
-  echo !$found_student;
-  // found student is false
 
     if ($found_student) {
 
@@ -39,12 +32,10 @@ if (isset($_POST['submit'])) {
 //}
    else {
 
-	echo "not a post request";
 } // end: if (isset($_POST['submit']))
 
 ?>
 
-<?php //$layout_context = "admin"; ?>
 <?php include("../first-cms/header.php"); ?>
 <title>Student Login</title>
 <div id="main">
