@@ -10,31 +10,23 @@ if (isset($_POST['submit'])) {
 	// Attempt Login
 	
 	$username = $_POST['username'];
-	$hashed_password = password_encrypt($_POST['password']);
+	$hashed_password = $_POST['password'];
 	$found_student = attempt_login($username, $hashed_password);
 
     if ($found_student) {
 
 	    // Mark user as logged in
-	    //$_SESSION["student_id"] = $found_student["id"];
-	    //$_SESSION["username"] = $found_admin["username"];
-	    
-	    //redirect_to("main_page.php"); // Will be search page later FIX REDIRECT FUNCTION
-
-    	echo "You did it! You're logged in!";
+	    $_SESSION["username"] = $username;
+      redirect_to("main_page.php");
 
     } else {
     	// Failure
-    	//$_SESSION["message"] = "Login failed. Try again.";
-      echo "Login failed. Try again.<br>";
+      echo "Login failed. Please try again.";
     }
   }
-//}
-   else {
-
-} // end: if (isset($_POST['submit']))
 
 ?>
+
 
 <?php include("../first-cms/header.php"); ?>
 <title>Student Login</title>
