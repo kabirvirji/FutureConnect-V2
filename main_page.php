@@ -1,7 +1,9 @@
-<?php include("../first-cms/header.php");
-//include("session.php"); ?>
+<?php 
+include("../first-cms/session.php"); 
+include("../first-cms/header.php");
+?>
 
-<h2> Welcome, <?// php $_SESSION["username"]; ?> </h2>
+<h2> Welcome, <?php echo $_SESSION["username"]; ?> </h2>
 	<title>Main Page</title>
 		<a href="/first-cms/student_register.php">Student Register</a><br><br>
 		<a href="/first-cms/mentor_register.php">Mentor Register</a><br><br>
