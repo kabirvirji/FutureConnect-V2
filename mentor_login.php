@@ -13,22 +13,15 @@ if (isset($_POST['submit'])) {
 
     if ($found_student) {
 
-	    // Mark user as logged in
-	    //$_SESSION["student_id"] = $found_student["id"];
-	    //$_SESSION["username"] = $found_admin["username"];
+	    $_SESSION["username"] = $username
 
       redirect_to("main_page.php");
 
     } else {
-    	// Failure
-    	//$_SESSION["message"] = "Login failed. Try again.";
+
       echo "Login failed. Please try again.";
     }
   }
-//}
-   else {
-
-} // end: if (isset($_POST['submit']))
 
 ?>
 
