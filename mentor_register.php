@@ -1,7 +1,7 @@
 <?php
 // create database connection
 require_once("database_connection.php");
-// require the helper functions one
+// require the helper functions
 require_once("functions.php");
 
 $username_error = ""; 
@@ -10,26 +10,42 @@ $school_error = "";
 $program_error = "";
 
 if (isset($_POST['submit'])) {
-	empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
-	empty($_POST['password']) ? $password_error = "required field" : $password = $_POST['password'];
-	empty($_POST['school']) ? $school_error = "required field" : $school = mysql_real_escape_string($_POST['school']);
-	empty($_POST['program']) ? $program_error = "required field" : $program = mysql_real_escape_string($_POST['program']);
 
-	
+	$username = mysql_real_escape_string($_POST["username"]);
+	$password = $_POST["password"];
+	$school = mysql_real_escape_string($_POST["school"]);
+	$program = mysql_real_escape_string($_POST["program"]);
 
+	if (!empty($username)) { 
+		// check to see if that username exists
+		$query  = "SELECT * ";
+		$query .= "FROM mentors ";
+		$query .= "WHERE username = '{$username}' ";
+		$existing_username = mysql_db_query("FutureConnect", $query);
+		$row = mysql_fetch_assoc($existing_username);
+		if ($row["username"] === $username) {  // the username already exists
+			$username = "";
+			$username_error = "That username already exists.";
+		} else {
 
-	if (!empty($username) && !empty($password)) {
-		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-		$sql_write = "INSERT INTO mentors (username, password, school, program)
-			VALUES ('{$username}', '{$hashed_password}', '{$school}', '{$program}')";
+				// the username does not exist, do everything normally
+				if (!empty($username) && !empty($password)) {
 
-		$result = mysql_db_query("FutureConnect", $sql_write);
+					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+					$sql_write = "INSERT INTO mentors (username, password, school, program)
+					VALUES ('{$username}', '{$hashed_password}', '{$school}', '{$program}')";
 
-		if ($result) {
-			redirect_to("main_page.php");
+					$result = mysql_db_query("FutureConnect", $sql_write);
+
+					if ($result) {
+						redirect_to("main_page.php");
+					} else {
+						redirect_to("mentor_register.php");
+					}
+				}
+			}
 		}
 	}
-}
 
 ?>
 
@@ -55,12 +71,6 @@ if (isset($_POST['submit'])) {
 	  	<span class="error">* <?php echo $program_error;?></span><br>
 	  	<input type="submit" name="submit" value="submit">
 	</form>
-
-	<?php
-
-
-
-	?>
 
 <!-- HTML footer -->
 <?php include("../first-cms/footer.php"); ?>
