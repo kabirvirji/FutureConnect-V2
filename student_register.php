@@ -1,19 +1,18 @@
 <?php
 // create database connection
 require_once("database_connection.php");
-// require the helper functions one
+// require the helper functions
 require_once("functions.php");
 
 $username_error = ""; 
 $password_error = "";
 
 if (isset($_POST['submit'])) {
-	// empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
-	// empty($_POST['password']) ? $password_error = "required field" : $password = $_POST['password'];
+
 	$username = mysql_real_escape_string($_POST["username"]);
 	$password = $_POST["password"];
 
-	if (!empty($username)) {  // username is not blank
+	if (!empty($username)) { 
 		// check to see if that username exists
 		$query  = "SELECT * ";
 		$query .= "FROM students ";
@@ -62,12 +61,6 @@ if (isset($_POST['submit'])) {
 	  	<span class="error">* <?php echo $password_error;?></span><br>
 	  	<input type="submit" name="submit" value="submit">
 	</form>
-
-	<?php
-
-
-
-	?>
 
 <!-- HTML footer -->
 <?php include("../first-cms/footer.php"); ?>
