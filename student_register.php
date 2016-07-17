@@ -4,27 +4,45 @@ require_once("database_connection.php");
 // require the helper functions one
 require_once("functions.php");
 
-$username_error = "";
+$username_error = ""; 
 $password_error = "";
 
 if (isset($_POST['submit'])) {
-	empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
-	empty($_POST['password']) ? $password_error = "required field" : $password = $_POST['password'];
+	// empty($_POST['username']) ? $username_error = "required field" : $username = test_input($_POST['username']);
+	// empty($_POST['password']) ? $password_error = "required field" : $password = $_POST['password'];
+	$username = mysql_real_escape_string($_POST["username"]);
+	$password = $_POST["password"];
 
-	$hashed_password = password_encrypt($password);
+	if (!empty($username)) {  // username is not blank
+		// check to see if that username exists
+		$query  = "SELECT * ";
+		$query .= "FROM students ";
+		$query .= "WHERE username = '{$username}' ";
+		$existing_username = mysql_db_query("FutureConnect", $query);
+		$row = mysql_fetch_assoc($existing_username);
+		if ($row["username"] === $username) {  // the username already exists
+			$username = "";
+			$username_error = "That username already exists.";
+		} else {
 
+				// the username does not exist, do everything normally
+				if (!empty($username) && !empty($password)) {
 
-	if (!empty($username) && !empty($password)) {
-		$sql_write = "INSERT INTO students (username, password)
-			VALUES ('{$username}', '{$hashed_password}')";
+					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+					$sql_write = "INSERT INTO students (username, password)
+					VALUES ('{$username}', '{$hashed_password}')";
 
-		$result = mysql_db_query("FutureConnect", $sql_write);
+					$result = mysql_db_query("FutureConnect", $sql_write);
 
-		if ($result) {
-			redirect_to("main_page.php");
+					if ($result) {
+						redirect_to("main_page.php");
+					} else {
+						redirect_to("student_register.php");
+					}
+				}
+			}
 		}
 	}
-}
 
 ?>
 
