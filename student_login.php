@@ -15,8 +15,7 @@ if (isset($_POST['submit'])) {
 
     if ($found_student) {
 
-	    // Mark user as logged in
-      $_SESSION["logged-in"] = true;  
+	    // Mark user as logged in  
 	    $_SESSION["username"] = $username;
       redirect_to("main_page.php");
 
@@ -46,8 +45,6 @@ if (isset($_POST['submit'])) {
       </p>
       <input type="submit" name="submit" value="Submit" />
     </form>
-    <br />
-    <a href="/first-cms/main_page.php">Cancel</a>
   </div>
 </div>
 

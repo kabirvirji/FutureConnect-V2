@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
 
 				// the username does not exist, do everything normally
 				if (!empty($username) && !empty($password)) {
-					
+
 					// insert information in database
 					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 					$sql_write = "INSERT INTO students (username, password)
@@ -41,6 +41,7 @@ if (isset($_POST['submit'])) {
 					$result = mysql_db_query("FutureConnect", $sql_write);
 
 					if ($result) {
+						$_SESSION["student-register-message"] = false;
 						redirect_to("main_page.php");
 					} else {
 						redirect_to("student_register.php");

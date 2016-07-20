@@ -56,6 +56,7 @@ if (empty($username_error) && empty($password_error) && empty($school_error) && 
 					$result = mysql_db_query("FutureConnect", $sql_write);
 
 					if ($result) {
+						$_SESSION["mentor-reigster-message"] = false;
 						redirect_to("main_page.php");
 					} else {
 						redirect_to("mentor_register.php");

@@ -1,6 +1,10 @@
 <?php
 
 	session_start();
+
+	$_SESSION["username"] = "";
+	$_SESSION["student-register-message"] = true;
+	$_SESSION["mentor-registermessage"] = true;
 	
 	function message() 
 	{
