@@ -10,39 +10,45 @@ $school_error = "";
 $program_error = "";
 $email_error = "";
 
+
+// if post request
 if (isset($_POST['submit'])) {
 
+	print_r($_POST);
+
+	// if field exists, set variable. if not, set error
 	!empty($_POST["username"]) ? $username = mysql_real_escape_string($_POST["username"]) : $username_error = "required field"; 
 	!empty($_POST["password"]) ? $password = $_POST["password"] : $password_error = "required field"; 
 	!empty($_POST["school"]) ? $school = mysql_real_escape_string($_POST["school"]) : $school_error = "required field"; 
 	!empty($_POST["program"]) ? $program = mysql_real_escape_string($_POST["program"]) : $program_error = "required field"; 
 	!empty($_POST["email"]) ? $email = mysql_real_escape_string($_POST["email"]) : $email_error = "required field"; 
 
-if ($username_error === "" && $password_error === "" && $school_error === "" && $program_error === "" && $email_error === "") {
+if (empty($username_error) && empty($password_error) && empty($school_error) && empty($program_error) && empty($email_error)) {
 
+	// no required fields errors
 
-	if (!empty($username) && !empty($email)) { 
 		// check to see if that username exists
 		$query_username  = "SELECT * ";
 		$query_username .= "FROM mentors ";
 		$query_username .= "WHERE username = '{$username}' ";
 		$existing_username = mysql_db_query("FutureConnect", $query_username);
 		$row_username = mysql_fetch_assoc($existing_username);
-		
+		// check to see if that email exists 
 		$query_email  = "SELECT * ";
 		$query_email .= "FROM mentors ";
 		$query_email .= "WHERE username = '{$email}' ";
 		$existing_password = mysql_db_query("FutureConnect", $query_email);
 		$row_password = mysql_fetch_assoc($existing_password);
-		
-		if ($row_username["username"] === $username || $row_password["email"] === $email) {  // the username or email already exists
+		// the username or email already exists
+		if ($row_username["username"] === $username || $row_password["email"] === $email) {  
 			$username = "";
 			$username_error = "That username already exists.";
+		// the username and email are valid, and do not previously exist
 		} else {
 
 				// everything exists
 				if (!empty($username) && !empty($password) && !empty($school) && !empty($program) && !empty($email)) {
-
+					// put information in database
 					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 					$sql_write = "INSERT INTO mentors (username, password, school, program, email)
 					VALUES ('{$username}', '{$hashed_password}', '{$school}', '{$program}', '{$email}')";
@@ -58,7 +64,6 @@ if ($username_error === "" && $password_error === "" && $school_error === "" && 
 			}
 		}
 	}
-}
 
 ?>
 
@@ -83,7 +88,7 @@ if ($username_error === "" && $password_error === "" && $school_error === "" && 
 	  	<input type="text" name="program"><br><br>
 	  	<span class="error">* <?php echo $program_error;?></span><br>
 	 	email<br>
-	 	<input type="text" name="username"><br>
+	 	<input type="text" name="email"><br>
 	 	<span class="error">* <?php echo $email_error;?></span><br>
 	  	<input type="submit" name="submit" value="submit">
 	</form>
