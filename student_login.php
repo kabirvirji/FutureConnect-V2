@@ -16,6 +16,7 @@ if (isset($_POST['submit'])) {
     if ($found_student) {
 
 	    // Mark user as logged in
+      $_SESSION["logged-in"] = true;  
 	    $_SESSION["username"] = $username;
       redirect_to("main_page.php");
 

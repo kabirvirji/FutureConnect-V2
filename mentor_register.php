@@ -10,11 +10,8 @@ $school_error = "";
 $program_error = "";
 $email_error = "";
 
-
 // if post request
 if (isset($_POST['submit'])) {
-
-	print_r($_POST);
 
 	// if field exists, set variable. if not, set error
 	!empty($_POST["username"]) ? $username = mysql_real_escape_string($_POST["username"]) : $username_error = "required field"; 
@@ -23,9 +20,8 @@ if (isset($_POST['submit'])) {
 	!empty($_POST["program"]) ? $program = mysql_real_escape_string($_POST["program"]) : $program_error = "required field"; 
 	!empty($_POST["email"]) ? $email = mysql_real_escape_string($_POST["email"]) : $email_error = "required field"; 
 
+// if no required fields errors
 if (empty($username_error) && empty($password_error) && empty($school_error) && empty($program_error) && empty($email_error)) {
-
-	// no required fields errors
 
 		// check to see if that username exists
 		$query_username  = "SELECT * ";
@@ -33,22 +29,26 @@ if (empty($username_error) && empty($password_error) && empty($school_error) && 
 		$query_username .= "WHERE username = '{$username}' ";
 		$existing_username = mysql_db_query("FutureConnect", $query_username);
 		$row_username = mysql_fetch_assoc($existing_username);
+
 		// check to see if that email exists 
 		$query_email  = "SELECT * ";
 		$query_email .= "FROM mentors ";
 		$query_email .= "WHERE username = '{$email}' ";
 		$existing_password = mysql_db_query("FutureConnect", $query_email);
 		$row_password = mysql_fetch_assoc($existing_password);
-		// the username or email already exists
+
+		// if the username or email already exists
 		if ($row_username["username"] === $username || $row_password["email"] === $email) {  
 			$username = "";
 			$username_error = "That username already exists.";
-		// the username and email are valid, and do not previously exist
+
+		// else the username and email are valid, and do not previously exist
 		} else {
 
-				// everything exists
+				// if everything exists
 				if (!empty($username) && !empty($password) && !empty($school) && !empty($program) && !empty($email)) {
-					// put information in database
+
+					// insert information in database
 					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 					$sql_write = "INSERT INTO mentors (username, password, school, program, email)
 					VALUES ('{$username}', '{$hashed_password}', '{$school}', '{$program}', '{$email}')";

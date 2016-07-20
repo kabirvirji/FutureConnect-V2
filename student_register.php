@@ -7,26 +7,33 @@ require_once("functions.php");
 $username_error = ""; 
 $password_error = "";
 
+// if post request
 if (isset($_POST['submit'])) {
 
-	$username = mysql_real_escape_string($_POST["username"]);
-	$password = $_POST["password"];
+	// if field exists, set variable. if not, set error
+	!empty($_POST["username"]) ? $username = mysql_real_escape_string($_POST["username"]) : $username_error = "required field"; 
+	!empty($_POST["password"]) ? $password = $_POST["password"] : $password_error = "required field"; 
 
-	if (!empty($username)) { 
+	if (!empty($username) && !empty($password)) { 
+
 		// check to see if that username exists
 		$query  = "SELECT * ";
 		$query .= "FROM students ";
 		$query .= "WHERE username = '{$username}' ";
 		$existing_username = mysql_db_query("FutureConnect", $query);
 		$row = mysql_fetch_assoc($existing_username);
-		if ($row["username"] === $username) {  // the username already exists
+		
+		// if the username already exists
+		if ($row["username"] === $username) {  
 			$username = "";
 			$username_error = "That username already exists.";
+
 		} else {
 
 				// the username does not exist, do everything normally
 				if (!empty($username) && !empty($password)) {
-
+					
+					// insert information in database
 					$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 					$sql_write = "INSERT INTO students (username, password)
 					VALUES ('{$username}', '{$hashed_password}')";
