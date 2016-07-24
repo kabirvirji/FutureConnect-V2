@@ -19,16 +19,5 @@
 			return $output;
 		}
 	}
-
-	function errors() {
-		if (isset($_SESSION["errors"])) {
-			$errors = $_SESSION["errors"];
-			
-			// clear message after use
-			$_SESSION["errors"] = null;
-			
-			return $errors;
-		}
-	}
 	
 ?>
